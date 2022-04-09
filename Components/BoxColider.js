@@ -4,6 +4,16 @@ export default class BoxColider extends Colider {
     constructor({ position, size }) {
         super({ position, size });
         this.hasBottomColision = false;
+        this.hasTopColision = false;
+        this.hasLeftColision = false;
+        this.hasRightColision = false;
+    }
+
+    dropColision() {
+        this.hasBottomColision =
+            this.hasTopColision =
+            this.hasLeftColision =
+            this.hasRightColision = false;
     }
 
     colidesTopWith({ colider, velocity_y }) {
@@ -15,11 +25,17 @@ export default class BoxColider extends Colider {
     }
 
     colidesBottomWith({ colider, velocity_y }) {
-        return this.position.y + this.size.height + velocity_y > colider.position.y &&
+        let colCondition = this.position.y + this.size.height + velocity_y > colider.position.y &&
+            this.position.x < colider.position.x + colider.size.width &&
+            this.position.x + this.size.width > colider.position.x &&
+            this.position.y + velocity_y < colider.position.y;
+        let col2Condition = this.position.y + this.size.height + velocity_y > colider.position.y &&
             this.position.x < colider.position.x + colider.size.width &&
             this.position.x + this.size.width > colider.position.x &&
             this.position.y < colider.position.y &&
-            this.position.y + this.size.height < colider.position.y + colider.size.height;
+            this.position.y + this.size.height + velocity_y > colider.position.y;
+
+        return colCondition || col2Condition;
     }
 
     colidesLeftWith(colider) {

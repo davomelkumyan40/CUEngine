@@ -1,6 +1,5 @@
 import _2DGraphics from './_2DGraphics.js';
 import _2DPhysics from './_2DPhysics.js';
-import Input from '../Input.js';
 
 export default class _2D {
     constructor({ height, width, update, fixedUpdate }) {
@@ -13,7 +12,6 @@ export default class _2D {
     }
 
     generate() {
-        Input.listen();
         this.physics.calculate();
         this.graphics.render();
     }

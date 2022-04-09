@@ -1,20 +1,30 @@
-import Input from '../Input.js';
-import Behavior from '../Behavior.js';
+import Behaviour from '../Behaviour.js';
+import { Input, Keys } from '../Input.js';
 
-export default class Player extends Behavior {
+
+export default class Player extends Behaviour {
+    constructor(object) {
+        super(object);
+        this.isJumping = false;
+    }
+
     update() {
 
     }
 
     fixedUpdate() {
-        if (Input.getKeyDown("a")) {
-            this.object.rigidBody.addForce({ x: -5 });
+        if (Input.getKeyDown(Keys.a)) {
+            this.object.rigidBody.velocity.x = -10;
         }
-        if (Input.getKeyDown("space")) {
-            this.object.rigidBody.addForce({ y: 2 });
+        if (Input.getKeyDown(Keys.space)) {
+            if (!this.isJumping) {
+                this.isJumping = true;
+                this.object.rigidBody.addForce({ y: 2 });
+            }
         }
-        if (Input.getKeyDown("d")) {
-            this.object.rigidBody.addForce({ x: 5 });
+        if (Input.getKeyDown(Keys.d)) {
+            this.object.rigidBody.velocity.x = 10;
         }
+        this.isJumping = !this.object.boxColider.hasBottomColision;
     }
 }

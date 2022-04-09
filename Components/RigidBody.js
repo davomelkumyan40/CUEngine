@@ -1,4 +1,4 @@
-import { _2d } from '../engine.js';
+import { _2d } from '../CuEngine.js';
 import Time from '../Primitives/Time.js';
 
 export default class RigidBody {
@@ -31,9 +31,9 @@ export default class RigidBody {
     calculateForce(seconds) {
         this.velocity.y = (this.velocity.y + this.g * seconds); // V = V0 - G * T
         if (Math.floor(this.velocity.y) === 0) {
+            this.time.reset();
             this.isForced = false;
             this.freeFalling = true;
-            this.time.reset();
         }
     }
 
@@ -47,46 +47,52 @@ export default class RigidBody {
         else this.calculateForce(seconds);
 
         if (boxColider) {
+            boxColider.dropColision();
             boxColider.position = this.position;
             for (let i = 0; i < _2d.objects.length; i++) {
                 const obj = _2d.objects[i];
                 if (obj.boxColider && obj.boxColider !== boxColider) {
-                    if (boxColider.colidesTopWith({ colider: obj.boxColider, velocity_y: this.velocity.y })) {
-                        this.isForced = false;
-                        this.velocity.y = 0;
-                        this.position.y = obj.boxColider.position.y + obj.boxColider.size.height + 1;
-                    }
                     if (boxColider.colidesRightWith(obj.boxColider)) {
+                        boxColider.hasRightColision = true;
                         if (this.velocity.x > 0)
                             this.velocity.x = 0;
                         this.position.x = obj.boxColider.position.x - this.size.width;
                     }
                     if (boxColider.colidesLeftWith(obj.boxColider)) {
+                        boxColider.hasLeftColision = true;
                         if (this.velocity.x < 0)
                             this.velocity.x = 0;
                         this.position.x = obj.boxColider.position.x + obj.boxColider.size.width;
                     }
-                    if (boxColider.colidesBottomWith({ colider: obj.boxColider, velocity_y: this.velocity.y }) && !this.isForced) {
+                    if (boxColider.colidesTopWith({ colider: obj.boxColider, velocity_y: this.velocity.y })) {
+                        this.isForced = false;
+                        this.velocity.y = 0;
+                        this.position.y = obj.boxColider.position.y + obj.boxColider.size.height + 1;
+                    }
+                    if (boxColider.colidesBottomWith({ colider: obj.boxColider, velocity_y: this.velocity.y })) { //  && !this.isForced
                         this.velocity.y = 0;
                         this.position.y = obj.boxColider.position.y - this.size.height;
-                        obj.boxColider.hasBottomColision = true;
+                        boxColider.hasBottomColision = true;
+                        obj.boxColider.hasTopColision = true;
                     } else {
-                        obj.boxColider.hasBottomColision = false;
+                        obj.boxColider.hasTopColision = false;
                         if (!this.freeFalling && !this.isForced) {
                             this.time.reset();
                         }
                     }
                 }
+
             }
             this.freeFalling = _2d.objects.every(
                 o => o.boxColider ?
-                    o.boxColider.hasBottomColision ? false : true
+                    o.boxColider.hasTopColision ? false : true
                     : true);
         }
 
         this.position.y += this.velocity.y;
         this.position.x += this.velocity.x;
         this.velocity.x = 0;
+
     }
 
     //TODO finish binding

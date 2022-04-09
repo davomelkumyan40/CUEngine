@@ -1,4 +1,4 @@
-import { _2d } from '../engine.js';
+import { _2d } from '../CuEngine.js';
 
 export default class SpriteRenderer {
     constructor(sprite) {

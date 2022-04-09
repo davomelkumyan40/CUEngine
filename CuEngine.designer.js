@@ -1,6 +1,6 @@
 import Object from './Components/Object.js';
-import { _2d } from '../engine.js';
-import Behavior from './Behavior.js';
+import { _2d } from '../CuEngine.js';
+import Behaviour from './Behaviour.js';
 
 //User Side Imports;
 import Player from './Scripts/Player.js';
@@ -16,8 +16,8 @@ export default class Designer {
     }
 
     InitializeDesigner() {
-        const backgroundBehavior = new Behavior();
-        backgroundBehavior.object = new Object()
+        const backgroundBehaviour = new Behaviour();
+        backgroundBehaviour.object = new Object()
             .setSprite({
                 position: {
                     x: 0,
@@ -33,8 +33,8 @@ export default class Designer {
             });
 
 
-        const playerBehavior = new Player();
-        playerBehavior.object = new Object()
+        const playerBehaviour = new Player();
+        playerBehaviour.object = new Object()
             .setSprite({
                 position: {
                     x: 300,
@@ -73,16 +73,16 @@ export default class Designer {
                 }
             });
 
-        const enemyBehavior = new Enemy();
-        enemyBehavior.object = new Object()
+        const enemyBehaviour = new Enemy();
+        enemyBehaviour.object = new Object()
             .setSprite({
                 position: {
                     x: 400,
                     y: 300
                 },
                 size: {
-                    width: 50,
-                    height: 150
+                    width: 100,
+                    height: 200
                 },
                 fill: {
                     color: "yellow"
@@ -98,8 +98,8 @@ export default class Designer {
                     y: 300
                 },
                 size: {
-                    width: 50,
-                    height: 150
+                    width: 100,
+                    height: 200
                 }
             })
             .setBoxColider({
@@ -108,13 +108,13 @@ export default class Designer {
                     y: 300
                 },
                 size: {
-                    width: 50,
-                    height: 150
+                    width: 100,
+                    height: 200
                 }
             });
 
-        const groundBehavior = new Behavior();
-        groundBehavior.object = new Object()
+        const groundBehaviour = new Behaviour();
+        groundBehaviour.object = new Object()
             .setSprite({
                 position: {
                     x: 0,
@@ -139,8 +139,8 @@ export default class Designer {
                 }
             });
 
-        const ground2Behavior = new Behavior();
-        ground2Behavior.object = new Object()
+        const ground2Behaviour = new Behaviour();
+        ground2Behaviour.object = new Object()
             .setSprite({
                 position: {
                     x: 700,
@@ -165,12 +165,12 @@ export default class Designer {
                 },
             });
 
-        const ground3Behavior = new Behavior();
-        ground3Behavior.object = new Object()
+        const ground3Behaviour = new Behaviour();
+        ground3Behaviour.object = new Object()
             .setSprite({
                 position: {
                     x: 0,
-                    y: _2d.graphics.height - 300
+                    y: _2d.graphics.height - 500
                 },
                 size: {
                     width: _2d.graphics.width - 700,
@@ -183,7 +183,7 @@ export default class Designer {
             .setBoxColider({
                 position: {
                     x: 0,
-                    y: _2d.graphics.height - 300
+                    y: _2d.graphics.height - 500
                 },
                 size: {
                     width: _2d.graphics.width - 700,
@@ -191,12 +191,39 @@ export default class Designer {
                 },
             });
 
-        this.addLayout(backgroundBehavior);
-        this.addLayout(playerBehavior);
-        this.addLayout(enemyBehavior);
-        this.addLayout(groundBehavior);
-        this.addLayout(ground2Behavior);
-        this.addLayout(ground3Behavior);
+        const ground4Behaviour = new Behaviour();
+        ground4Behaviour.object = new Object()
+            .setSprite({
+                position: {
+                    x: 200,
+                    y: _2d.graphics.height - 200
+                },
+                size: {
+                    width: _2d.graphics.width - 700,
+                    height: 20
+                },
+                fill: {
+                    color: "green"
+                }
+            })
+            .setBoxColider({
+                position: {
+                    x: 200,
+                    y: _2d.graphics.height - 200
+                },
+                size: {
+                    width: _2d.graphics.width - 700,
+                    height: 20
+                },
+            });
+
+        this.addLayout(backgroundBehaviour);
+        this.addLayout(playerBehaviour);
+        this.addLayout(enemyBehaviour);
+        this.addLayout(groundBehaviour);
+        this.addLayout(ground2Behaviour);
+        this.addLayout(ground3Behaviour);
+        this.addLayout(ground4Behaviour);
         return this;
     }
 }

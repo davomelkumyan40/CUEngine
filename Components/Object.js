@@ -1,4 +1,4 @@
-import { _2d } from '../engine.js';
+import { _2d } from '../CuEngine.js';
 import Sprite from './Sprite.js';
 import SpriteRenderer from './SpriteRenderer.js';
 import RigidBody from './RigidBody.js';
@@ -12,10 +12,14 @@ export default class Object {
         this.spriteRenderer = undefined;
         _2d.objects.push(this);
     }
+
+    //TODO test
     static create({ sprite, rigidBody, boxColider } = {}) {
-        this.rigidBody = rigidBody;
-        this.sprite = sprite;
-        this.boxColider = boxColider;
+        const object = new Object();
+        object.rigidBody = rigidBody;
+        object.sprite = sprite;
+        object.boxColider = boxColider;
+        _2d.objects.push(this);
         return this;
     }
 
