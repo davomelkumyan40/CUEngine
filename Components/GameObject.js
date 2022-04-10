@@ -4,7 +4,7 @@ import SpriteRenderer from './SpriteRenderer.js';
 import RigidBody from './RigidBody.js';
 import BoxColider from './BoxColider.js';
 
-export default class Object {
+export default class GameObject {
     constructor() {
         this.rigidBody = undefined;
         this.sprite = undefined;
@@ -15,7 +15,7 @@ export default class Object {
 
     //TODO test
     static create({ sprite, rigidBody, boxColider } = {}) {
-        const object = new Object();
+        const object = new GameObject();
         object.rigidBody = rigidBody;
         object.sprite = sprite;
         object.boxColider = boxColider;

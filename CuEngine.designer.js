@@ -1,6 +1,7 @@
-import Object from './Components/Object.js';
+import GameObject from './Components/GameObject.js';
 import { _2d } from '../CuEngine.js';
 import Behaviour from './Behaviour.js';
+import Camera from './Camera.js';
 
 //User Side Imports;
 import Player from './Scripts/Player.js';
@@ -16,8 +17,10 @@ export default class Designer {
     }
 
     InitializeDesigner() {
+        const cameraBehaviour = new Camera();
+
         const backgroundBehaviour = new Behaviour();
-        backgroundBehaviour.object = new Object()
+        backgroundBehaviour.object = new GameObject()
             .setSprite({
                 position: {
                     x: 0,
@@ -34,7 +37,7 @@ export default class Designer {
 
 
         const playerBehaviour = new Player();
-        playerBehaviour.object = new Object()
+        playerBehaviour.object = new GameObject()
             .setSprite({
                 position: {
                     x: 300,
@@ -74,7 +77,7 @@ export default class Designer {
             });
 
         const enemyBehaviour = new Enemy();
-        enemyBehaviour.object = new Object()
+        enemyBehaviour.object = new GameObject()
             .setSprite({
                 position: {
                     x: 400,
@@ -114,7 +117,7 @@ export default class Designer {
             });
 
         const groundBehaviour = new Behaviour();
-        groundBehaviour.object = new Object()
+        groundBehaviour.object = new GameObject()
             .setSprite({
                 position: {
                     x: 0,
@@ -140,7 +143,7 @@ export default class Designer {
             });
 
         const ground2Behaviour = new Behaviour();
-        ground2Behaviour.object = new Object()
+        ground2Behaviour.object = new GameObject()
             .setSprite({
                 position: {
                     x: 700,
@@ -166,7 +169,7 @@ export default class Designer {
             });
 
         const ground3Behaviour = new Behaviour();
-        ground3Behaviour.object = new Object()
+        ground3Behaviour.object = new GameObject()
             .setSprite({
                 position: {
                     x: 0,
@@ -192,7 +195,7 @@ export default class Designer {
             });
 
         const ground4Behaviour = new Behaviour();
-        ground4Behaviour.object = new Object()
+        ground4Behaviour.object = new GameObject()
             .setSprite({
                 position: {
                     x: 200,
@@ -217,13 +220,14 @@ export default class Designer {
                 },
             });
 
-        this.addLayout(backgroundBehaviour);
+        this.addLayout(cameraBehaviour);
         this.addLayout(playerBehaviour);
         this.addLayout(enemyBehaviour);
         this.addLayout(groundBehaviour);
         this.addLayout(ground2Behaviour);
         this.addLayout(ground3Behaviour);
         this.addLayout(ground4Behaviour);
+
         return this;
     }
 }

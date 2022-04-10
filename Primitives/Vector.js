@@ -1,10 +1,7 @@
 export default class Vector {
-    constructor({ x, y, z } = {}) {
-        if (x)
-            this.x = 0;
-        if (y)
-            this.y = 0;
-        if (z)
-            this.z = 0;
+    constructor(x, y, z) {
+        this.x = x ?? 0;
+        this.y = y ?? 0;
+        this.z = z ?? 0;
     }
 }

@@ -7,10 +7,12 @@ export default class Enemy extends Behaviour {
     }
 
     update() {
-
+        super.update();
     }
 
     fixedUpdate() {
+        super.fixedUpdate();
+
         if (Input.getKeyDown(Keys.arrowLeft)) {
             this.object.rigidBody.addForce({ x: -5 });
         }
