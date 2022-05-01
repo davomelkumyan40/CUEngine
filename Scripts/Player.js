@@ -36,7 +36,7 @@ export default class Player extends Behaviour {
         if (Input.getKeyDown(Keys.space)) {
             // if (!this.isJumping) {
             //     this.isJumping = true;
-            this.rBody.addForce({ velocity: new Vector3(0, 2), impulseMode: ImpulsMode.impuls });
+            this.rBody.addForce({ velocity: new Vector3(0, 2), impulsMode: ImpulsMode.impuls });
             //}
         }
         // if (Input.getKeyDown(Keys.d)) {

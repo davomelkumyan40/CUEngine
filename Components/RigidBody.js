@@ -30,10 +30,10 @@ export default class RigidBody {
         this.#g = value;
     }
 
-    addForce({ velocity, impulseMode = ImpulseMode.linear }) {
-        if (impulseMode === ImpulseMode.linear)
+    addForce({ velocity, impulsMode = ImpulseMode.linear }) {
+        if (impulsMode === ImpulseMode.linear)
             this.velocity = velocity;
-        else if (impulseMode === ImpulseMode.impuls) {
+        else if (impulsMode === ImpulseMode.impuls) {
             if (velocity.x) {
                 this.velocity.x = velocity.x * this.#pixelMultiplyer;
                 this.#isHorizontalForced = true;
