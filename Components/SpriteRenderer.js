@@ -1,4 +1,6 @@
-import { _2d } from '../CuEngine.js';
+import { engine } from '../Engine.js';
+import { Input } from '../Input.js';
+import Vector3D from '../Primitives/Vector3.js';
 
 export default class SpriteRenderer {
     constructor(sprite) {
@@ -7,8 +9,10 @@ export default class SpriteRenderer {
 
     render() {
         if (this.sprite.fill.color) {
-            _2d.graphics.context.fillStyle = this.sprite.fill.color;
-            _2d.graphics.context.fillRect(this.sprite.position.x, this.sprite.position.y, this.sprite.size.width, this.sprite.size.height);
+            engine.graphics.context.fillStyle = this.sprite.fill.color;
+            engine.graphics.context.fillRect(this.sprite.position.x, this.sprite.position.y, this.sprite.size.width, this.sprite.size.height);
         }
     }
+
+    
 }

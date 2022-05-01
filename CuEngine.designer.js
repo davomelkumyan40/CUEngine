@@ -1,7 +1,11 @@
 import GameObject from './Components/GameObject.js';
-import { _2d } from '../CuEngine.js';
+import { engine } from '../Engine.js';
 import Behaviour from './Behaviour.js';
 import Camera from './Camera.js';
+import Canvas from './Components/Canvas.js';
+import Vector3 from './Primitives/Vector3.js';
+import Size from './Primitives/Size.js';
+
 
 //User Side Imports;
 import Player from './Scripts/Player.js';
@@ -12,222 +16,92 @@ export default class Designer {
         this.layouts = new Array();
     }
 
-    addLayout(layout) {
+    addGameObject(layout) {
         this.layouts.push(layout);
     }
 
     InitializeDesigner() {
-        const cameraBehaviour = new Camera();
-
-        const backgroundBehaviour = new Behaviour();
-        backgroundBehaviour.object = new GameObject()
+        let obj = new GameObject(new Vector3(0, 0, 0))
             .setSprite({
-                position: {
-                    x: 0,
-                    y: 0
-                },
-                size: {
-                    width: _2d.graphics.width,
-                    height: _2d.graphics.height
-                },
+                position: new Vector3(0, 0),
+                size: new Size(engine.graphics.width, engine.graphics.height),
+                fill: {
+                    color: "#1E1E1E"
+                }
+            })
+            .build();
+        const camera = new Camera(obj);
+
+        obj = new GameObject(new Vector3(0, 0, 1))
+            .setSprite({
+                position: new Vector3(0, 0),
+                size: new Size(engine.graphics.width, engine.graphics.height),
                 fill: {
                     color: "black"
                 }
-            });
+            }).build();
+        const background = new Canvas(obj);
 
 
-        const playerBehaviour = new Player();
-        playerBehaviour.object = new GameObject()
+        obj = new GameObject(new Vector3(300, 200, 2), "Player", "Player")
             .setSprite({
-                position: {
-                    x: 300,
-                    y: 200
-                },
-                size: {
-                    width: 50,
-                    height: 150
-                },
+                position: new Vector3(300, 200),
+                size: new Size(50, 150),
                 fill: {
                     color: "red"
                 }
             })
             .setRigidBody({
-                velocity: {
-                    x: 0,
-                    y: 0
-                },
-                position: {
-                    x: 300,
-                    y: 200
-                },
-                size: {
-                    width: 50,
-                    height: 150
-                }
+                velocity: new Vector3(0, 0),
+                position: new Vector3(300, 200),
             })
             .setBoxColider({
-                position: {
-                    x: 300,
-                    y: 200
-                },
-                size: {
-                    width: 50,
-                    height: 150
-                }
-            });
+                position: new Vector3(300, 200),
+                size: new Size(50, 150)
+            })
+            .build();
 
-        const enemyBehaviour = new Enemy();
-        enemyBehaviour.object = new GameObject()
+        const player = new Player(obj);
+
+        obj = new GameObject(new Vector3(400, 300, 3), "Enemy", "Enemy")
             .setSprite({
-                position: {
-                    x: 400,
-                    y: 300
-                },
-                size: {
-                    width: 100,
-                    height: 200
-                },
+                position: new Vector3(400, 300),
+                size: new Size(100, 200),
                 fill: {
                     color: "yellow"
                 }
             })
             .setRigidBody({
-                velocity: {
-                    x: 0,
-                    y: 0
-                },
-                position: {
-                    x: 400,
-                    y: 300
-                },
-                size: {
-                    width: 100,
-                    height: 200
-                }
+                velocity: new Vector3(0, 0),
+                position: new Vector3(400, 300)
             })
             .setBoxColider({
-                position: {
-                    x: 400,
-                    y: 300
-                },
-                size: {
-                    width: 100,
-                    height: 200
-                }
-            });
+                position: new Vector3(400, 300),
+                size: new Size(100, 200),
+            })
+            .build();
+        const enemy = new Enemy(obj);
 
-        const groundBehaviour = new Behaviour();
-        groundBehaviour.object = new GameObject()
+        obj = new GameObject(new Vector3(0, engine.graphics.height - 40, 4))
             .setSprite({
-                position: {
-                    x: 0,
-                    y: _2d.graphics.height - 40
-                },
-                size: {
-                    width: _2d.graphics.width,
-                    height: 40
-                },
+                position: new Vector3(0, engine.graphics.height - 40),
+                size: new Size(engine.graphics.width, 40),
                 fill: {
                     color: "green"
                 }
             })
             .setBoxColider({
-                position: {
-                    x: 0,
-                    y: _2d.graphics.height - 40
-                },
-                size: {
-                    width: _2d.graphics.width,
-                    height: 40
-                }
-            });
-
-        const ground2Behaviour = new Behaviour();
-        ground2Behaviour.object = new GameObject()
-            .setSprite({
-                position: {
-                    x: 700,
-                    y: _2d.graphics.height - 300
-                },
-                size: {
-                    width: _2d.graphics.width - 700,
-                    height: 20
-                },
-                fill: {
-                    color: "green"
-                }
+                position: new Vector3(0, engine.graphics.height - 40),
+                size: new Size(engine.graphics.width, 40)
             })
-            .setBoxColider({
-                position: {
-                    x: 700,
-                    y: _2d.graphics.height - 300
-                },
-                size: {
-                    width: _2d.graphics.width - 700,
-                    height: 20
-                },
-            });
+            .build();
+        const ground = new Behaviour(obj);
 
-        const ground3Behaviour = new Behaviour();
-        ground3Behaviour.object = new GameObject()
-            .setSprite({
-                position: {
-                    x: 0,
-                    y: _2d.graphics.height - 500
-                },
-                size: {
-                    width: _2d.graphics.width - 700,
-                    height: 20
-                },
-                fill: {
-                    color: "green"
-                }
-            })
-            .setBoxColider({
-                position: {
-                    x: 0,
-                    y: _2d.graphics.height - 500
-                },
-                size: {
-                    width: _2d.graphics.width - 700,
-                    height: 20
-                },
-            });
-
-        const ground4Behaviour = new Behaviour();
-        ground4Behaviour.object = new GameObject()
-            .setSprite({
-                position: {
-                    x: 200,
-                    y: _2d.graphics.height - 200
-                },
-                size: {
-                    width: _2d.graphics.width - 700,
-                    height: 20
-                },
-                fill: {
-                    color: "green"
-                }
-            })
-            .setBoxColider({
-                position: {
-                    x: 200,
-                    y: _2d.graphics.height - 200
-                },
-                size: {
-                    width: _2d.graphics.width - 700,
-                    height: 20
-                },
-            });
-
-        this.addLayout(cameraBehaviour);
-        this.addLayout(playerBehaviour);
-        this.addLayout(enemyBehaviour);
-        this.addLayout(groundBehaviour);
-        this.addLayout(ground2Behaviour);
-        this.addLayout(ground3Behaviour);
-        this.addLayout(ground4Behaviour);
-
+        this.addGameObject(camera);
+        this.addGameObject(background);
+        this.addGameObject(player);
+        this.addGameObject(enemy);
+        this.addGameObject(ground);
         return this;
     }
 }

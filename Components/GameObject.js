@@ -1,26 +1,21 @@
-import { _2d } from '../CuEngine.js';
+import { engine } from '../Engine.js';
 import Sprite from './Sprite.js';
 import SpriteRenderer from './SpriteRenderer.js';
 import RigidBody from './RigidBody.js';
-import BoxColider from './BoxColider.js';
+import BoxColider from './BoxCollider.js';
+import Transform from './Transform.js';
+import CuEntity from './CuEntity.js';
 
-export default class GameObject {
-    constructor() {
+export default class GameObject extends CuEntity {
+    constructor(position, name, tag) {
+        super({ name, tag });
         this.rigidBody = undefined;
         this.sprite = undefined;
         this.boxColider = undefined;
         this.spriteRenderer = undefined;
-        _2d.objects.push(this);
-    }
-
-    //TODO test
-    static create({ sprite, rigidBody, boxColider } = {}) {
-        const object = new GameObject();
-        object.rigidBody = rigidBody;
-        object.sprite = sprite;
-        object.boxColider = boxColider;
-        _2d.objects.push(this);
-        return this;
+        this.isStatic = false; // new
+        super.transform = new Transform({ gameObject: this, position, name, tag });  // new
+        engine.gameObjects.push(this);
     }
 
     setSprite({ position, size, fill }) {
@@ -29,24 +24,33 @@ export default class GameObject {
             size: size,
             fill: fill
         });
-        this.spriteRenderer = new SpriteRenderer(this.sprite);
         return this;
     }
 
-    setRigidBody({ velocity, position, size }) {
+    setRigidBody({ velocity, position }) {
         this.rigidBody = new RigidBody({
             velocity: velocity,
-            position: position,
-            size: size
+            position: position
         });
         return this;
     }
 
-    setBoxColider({ position, size }) {
+    setBoxColider({ position, size, isTrigger = false }) {
         this.boxColider = new BoxColider({
             position: position,
-            size: size
+            size: size,
+            isTrigger: isTrigger,
+            transform: this.transform,
+            name: this.name,
+            tag: this.tag
         });
+        return this;
+    }
+
+    build() {
+        if (this.boxColider)
+            this.boxColider.rigidBody = this.rigidBody;
+        this.spriteRenderer = new SpriteRenderer(this.sprite);
         return this;
     }
 
@@ -62,5 +66,31 @@ export default class GameObject {
         }
         if (this.spriteRenderer)
             this.spriteRenderer.render();
+    }
+
+    getComponent(type) {
+        for (const key of Object.keys(this)) {
+            if (this[key] instanceof type)
+                return this[key];
+        }
+    }
+
+    static destroy() {
+    }
+
+    static instantiate() {
+
+    }
+
+    static findWithTag(tag) {
+        return engine.gameObjects.find(o => o.tag === tag);
+    }
+
+    static findGameObjectsWithTag(tag) {
+        return engine.gameObjects.filter(o => o.tag === tag);
+    }
+
+    static find(name) {
+        return engine.gameObjects.find(o => o.name === name);
     }
 }

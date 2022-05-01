@@ -1,7 +1,13 @@
+import { engine } from "./Engine.js";
+import Vector3 from "./Primitives/Vector3.js";
+
 export class Input {
     static keys;
+    static target;
+    static mousePosition = new Vector3();
 
-    static listen() {
+    static listen(target) {
+        Input.target = target;
         Input.keys = {};
         const keyEvent = (e) => {
             e = e || event; // for IE
@@ -9,6 +15,10 @@ export class Input {
         }
         window.addEventListener("keydown", keyEvent);
         window.addEventListener("keyup", keyEvent);
+        target.addEventListener("mousemove", (e) => {
+            Input.mousePosition.x = e.clientX;
+            Input.mousePosition.y = e.clientY;
+        });
     }
 
 
@@ -16,8 +26,17 @@ export class Input {
         return Input.keys[keyCode];
     }
 
-    static getKey(keyCode) {
+    static getKey(keyCode) { //TODO check
         return Input.keys[keyCode];
+    }
+
+    static getAxis(axisName) {
+        switch (axisName) {
+            case "Horizontal":
+                return this.getKeyDown(Keys.a) && Vector3.left || this.getKeyDown(Keys.d) && Vector3.right || new Vector3();
+            case "Vertical":
+                return this.getKeyDown(Keys.w) && Vector3.up || this.getKeyDown(Keys.s) && Vector3.down || new Vector3();
+        }
     }
 };
 
