@@ -8,8 +8,10 @@ import Size from './Primitives/Size.js';
 
 
 //User Side Imports;
-import Player from './Scripts/Player.js';
-import Enemy from './Scripts/Enemy.js';
+import { Dynamic } from './Scripts/Dynamic.js';
+import { Kinematic } from './Scripts/Kinematic.js';
+import { Static } from './Scripts/Static.js';
+import BodyType from './Primitives/BodyType.js';
 
 export default class Designer {
     constructor() {
@@ -43,44 +45,64 @@ export default class Designer {
         const background = new Canvas(obj);
 
 
-        obj = new GameObject(new Vector3(300, 200, 2), "Player", "Player")
+        obj = new GameObject(new Vector3(300, 600, 2), "Dynamic", "Dynamic")
             .setSprite({
-                position: new Vector3(300, 200),
-                size: new Size(50, 150),
+                position: new Vector3(300, 600),
+                size: new Size(100, 100),
                 fill: {
                     color: "red"
                 }
             })
             .setRigidBody({
-                velocity: new Vector3(0, 0),
-                position: new Vector3(300, 200),
+                bodyType: BodyType.dynamic
             })
-            .setBoxColider({
-                position: new Vector3(300, 200),
-                size: new Size(50, 150)
+            .setBoxCollider({
+                offset: new Vector3(0, 0),
+                size: new Size(100, 100)
             })
             .build();
+        const dynamic = new Dynamic(obj);
 
-        const player = new Player(obj);
 
-        obj = new GameObject(new Vector3(400, 300, 3), "Enemy", "Enemy")
+        obj = new GameObject(new Vector3(400, 600, 3), "Kinematic", "Kinematic")
             .setSprite({
-                position: new Vector3(400, 300),
-                size: new Size(100, 200),
+                position: new Vector3(400, 600),
+                size: new Size(100, 100),
                 fill: {
                     color: "yellow"
                 }
             })
             .setRigidBody({
-                velocity: new Vector3(0, 0),
-                position: new Vector3(400, 300)
+                bodyType: BodyType.kinematic
             })
-            .setBoxColider({
-                position: new Vector3(400, 300),
-                size: new Size(100, 200),
+            .setBoxCollider({
+                size: new Size(100, 100),
             })
             .build();
-        const enemy = new Enemy(obj);
+        const kinematic = new Kinematic(obj);
+
+
+
+
+        obj = new GameObject(new Vector3(800, 600, 3), "Static", "Static")
+            .setSprite({
+                position: new Vector3(800, 600),
+                size: new Size(100, 100),
+                fill: {
+                    color: "blue"
+                }
+            })
+            .setRigidBody({
+                bodyType: BodyType.static
+            })
+            .setBoxCollider({
+                size: new Size(100, 100),
+            })
+            .build();
+        const static_ = new Static(obj);
+
+
+
 
         obj = new GameObject(new Vector3(0, engine.graphics.height - 40, 4))
             .setSprite({
@@ -90,8 +112,7 @@ export default class Designer {
                     color: "green"
                 }
             })
-            .setBoxColider({
-                position: new Vector3(0, engine.graphics.height - 40),
+            .setBoxCollider({
                 size: new Size(engine.graphics.width, 40)
             })
             .build();
@@ -99,8 +120,9 @@ export default class Designer {
 
         this.addGameObject(camera);
         this.addGameObject(background);
-        this.addGameObject(player);
-        this.addGameObject(enemy);
+        this.addGameObject(dynamic);
+        this.addGameObject(kinematic);
+        this.addGameObject(static_);
         this.addGameObject(ground);
         return this;
     }

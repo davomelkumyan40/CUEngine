@@ -14,26 +14,30 @@ export default class Vector3 {
         return (this.x === vector3.x && this.y === vector3.y) //  && this.z === vector3.z
     }
 
+    #isVector(vector3) {
+        return (vector3.x || vector3.x === 0 && vector3.y || vector3.y === 0 && vector3.z || vector3.z === 0);
+    }
+
     add(vector3) {
-        if (vector3.x && vector3.y && vector3.z)
+        if (this.#isVector(vector3))
             return new Vector3(this.x + vector3.x, this.y + vector3.y, this.z + vector3.z);
         else return new Vector3(this.x + vector3, this.y + vector3, this.z + vector3);
     }
 
     sub(vector3) {
-        if (vector3.x && vector3.y && vector3.z)
+        if (this.#isVector(vector3))
             return new Vector3(this.x - vector3.x, this.y - vector3.y, this.z - vector3.z);
         else return new Vector3(this.x - vector3, this.y - vector3, this.z - vector3);
     }
 
     div(vector3) {
-        if (vector3.x && vector3.y && vector3.z)
+        if (this.#isVector(vector3))
             return new Vector3(this.x / vector3.x, this.y / vector3.y, this.z / vector3.z);
         else return new Vector3(this.x / vector3, this.y / vector3, this.z / vector3);
     }
 
     mult(vector3) {
-        if (vector3.x && vector3.y && vector3.z)
+        if (this.#isVector(vector3))
             return new Vector3(this.x * vector3.x, this.y * vector3.y, this.z * vector3.z);
         else return new Vector3(this.x * vector3, this.y * vector3, this.z * vector3);
     }

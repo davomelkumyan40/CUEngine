@@ -1,6 +1,4 @@
 import { engine } from '../Engine.js';
-import { Input } from '../Input.js';
-import Vector3D from '../Primitives/Vector3.js';
 
 export default class SpriteRenderer {
     constructor(sprite) {

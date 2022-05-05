@@ -42,13 +42,16 @@ export default class Graphics2D {
     }
 
     render() {
-        //first running user side code
-        designer.layouts.forEach((l) => {
-            l.update();
-        });
-        //then running engine side calculations
+        //first running engine side render
         this.gameObjects.forEach((o) => {
             o.update();
         });
+        // then running user side render
+        designer.layouts.sort((l1, l2) => {
+            return l1.transform.position.z - l2.transform.position.z;
+        }).forEach((l) => {
+            l.update();
+        });
+
     }
 }

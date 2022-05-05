@@ -2,16 +2,18 @@ import { engine } from '../Engine.js';
 import Sprite from './Sprite.js';
 import SpriteRenderer from './SpriteRenderer.js';
 import RigidBody from './RigidBody.js';
-import BoxColider from './BoxCollider.js';
+import BoxCollider from './BoxCollider.js';
 import Transform from './Transform.js';
 import CuEntity from './CuEntity.js';
+import BodyType from '../Primitives/BodyType.js';
+import Vector3 from '../Primitives/Vector3.js';
 
 export default class GameObject extends CuEntity {
     constructor(position, name, tag) {
         super({ name, tag });
         this.rigidBody = undefined;
         this.sprite = undefined;
-        this.boxColider = undefined;
+        this.boxCollider = undefined;
         this.spriteRenderer = undefined;
         this.isStatic = false; // new
         super.transform = new Transform({ gameObject: this, position, name, tag });  // new
@@ -27,17 +29,18 @@ export default class GameObject extends CuEntity {
         return this;
     }
 
-    setRigidBody({ velocity, position }) {
+    setRigidBody({ velocity, bodyType }) {
         this.rigidBody = new RigidBody({
-            velocity: velocity,
-            position: position
+            velocity: velocity ?? new Vector3(0, 0, 0),
+            position: this.transform.position,
+            bodyType: bodyType ?? BodyType.dynamic
         });
         return this;
     }
 
-    setBoxColider({ position, size, isTrigger = false }) {
-        this.boxColider = new BoxColider({
-            position: position,
+    setBoxCollider({ offset, size, isTrigger = false }) {
+        this.boxCollider = new BoxCollider({
+            offset: offset ?? new Vector3(0, 0, 0),
             size: size,
             isTrigger: isTrigger,
             transform: this.transform,
@@ -47,22 +50,34 @@ export default class GameObject extends CuEntity {
         return this;
     }
 
+    setCircleCollider() {
+        return this;
+    }
+
+    setAnimator() {
+        return this;
+    }
+
+
+
     build() {
-        if (this.boxColider)
-            this.boxColider.rigidBody = this.rigidBody;
+        if (!this.rigidBody)
+            this.setRigidBody({ bodyType: BodyType.static });
+        if (this.boxCollider)
+            this.boxCollider.attachedRigidBody = this.rigidBody;
         this.spriteRenderer = new SpriteRenderer(this.sprite);
         return this;
     }
 
     fixedUpdate() {
         if (this.rigidBody) {
-            this.rigidBody.calculatePhysics(this.boxColider);
+            this.rigidBody.calculatePhysics(this.boxCollider);
         }
     }
 
     update() {
         if (this.rigidBody) {
-            this.rigidBody.bindPosition(this.sprite);
+            this.transform.bind(this.sprite);
         }
         if (this.spriteRenderer)
             this.spriteRenderer.render();
