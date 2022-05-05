@@ -20,11 +20,14 @@ export default class GameObject extends CuEntity {
         engine.gameObjects.push(this);
     }
 
-    setSprite({ position, size, fill }) {
+    setSprite({ position, size, fill, offset, cutOffset, cutSize }) {
         this.sprite = new Sprite({
             position: position,
             size: size,
-            fill: fill
+            fill: fill,
+            offset: offset,
+            cutOffset,
+            cutSize
         });
         return this;
     }
@@ -61,7 +64,7 @@ export default class GameObject extends CuEntity {
 
 
     build() {
-        if (!this.rigidBody)
+        if (!this.rigidBody && this.boxCollider)
             this.setRigidBody({ bodyType: BodyType.static });
         if (this.boxCollider)
             this.boxCollider.attachedRigidBody = this.rigidBody;

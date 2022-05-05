@@ -38,18 +38,50 @@ export default class Designer {
             .setSprite({
                 position: new Vector3(0, 0),
                 size: new Size(engine.graphics.width, engine.graphics.height),
+                offset: new Vector3(engine.graphics.width, engine.graphics.height),
                 fill: {
-                    color: "black"
+                    color: "black",
+                    src: "./Assets/background.png"
                 }
             }).build();
         const background = new Canvas(obj);
 
+        obj = new GameObject(new Vector3(0, 0, 1))
+            .setSprite({
+                position: new Vector3(0, 400),
+                size: new Size(engine.graphics.width / 4 - 100, engine.graphics.width),
+                offset: new Vector3(0, 0),
+                cutSize: new Vector3(120, 500),
+                fill: {
+                    color: "black",
+                    src: "./Assets/shop.png"
+                }
+            }).build();
+        const background2 = new Canvas(obj);
 
-        obj = new GameObject(new Vector3(300, 600, 2), "Dynamic", "Dynamic")
+
+        obj = new GameObject(new Vector3(0, 0, 1))
+            .setSprite({
+                position: new Vector3(1430, 400),
+                size: new Size(engine.graphics.width / 4 - 100, engine.graphics.width),
+                offset: new Vector3(0, 0),
+                cutSize: new Vector3(120, 500),
+                fill: {
+                    color: "black",
+                    src: "./Assets/shop.png"
+                }
+            }).build();
+        const background3 = new Canvas(obj);
+
+
+        obj = new GameObject(new Vector3(300, 600, 2), "Hero", "Hero")
             .setSprite({
                 position: new Vector3(300, 600),
-                size: new Size(100, 100),
+                size: new Size(engine.graphics.width / 2 - 100, engine.graphics.height - 240),
+                offset: new Vector3(90, 80),
+                cutSize: new Vector3(190, 200),
                 fill: {
+                    src: "/Assets/hero/idle.png",
                     color: "red"
                 }
             })
@@ -58,71 +90,72 @@ export default class Designer {
             })
             .setBoxCollider({
                 offset: new Vector3(0, 0),
-                size: new Size(100, 100)
+                size: new Size(75, 200)
             })
             .build();
         const dynamic = new Dynamic(obj);
 
 
-        obj = new GameObject(new Vector3(400, 600, 3), "Kinematic", "Kinematic")
+
+        // obj = new GameObject(new Vector3(400, 600, 3), "Kinematic", "Kinematic")
+        //     .setSprite({
+        //         position: new Vector3(400, 600),
+        //         size: new Size(100, 100),
+        //         fill: {
+        //             color: "yellow",
+        //         }
+        //     })
+        //     .setRigidBody({
+        //         bodyType: BodyType.kinematic
+        //     })
+        //     .setBoxCollider({
+        //         size: new Size(100, 100),
+        //     })
+        //     .build();
+        // const kinematic = new Kinematic(obj);
+
+
+
+
+        // obj = new GameObject(new Vector3(800, 600, 3), "Static", "Static")
+        //     .setSprite({
+        //         position: new Vector3(800, 600),
+        //         size: new Size(100, 100),
+        //         fill: {
+        //             color: "blue"
+        //         }
+        //     })
+        //     .setRigidBody({
+        //         bodyType: BodyType.static
+        //     })
+        //     .setBoxCollider({
+        //         size: new Size(100, 100),
+        //     })
+        //     .build();
+        // const static_ = new Static(obj);
+
+
+        obj = new GameObject(new Vector3(0, engine.graphics.height - 170, 4))
             .setSprite({
-                position: new Vector3(400, 600),
-                size: new Size(100, 100),
+                position: new Vector3(0, engine.graphics.height - 170),
+                size: new Size(engine.graphics.width, 170),
                 fill: {
-                    color: "yellow"
+                    color: ""
                 }
             })
-            .setRigidBody({
-                bodyType: BodyType.kinematic
-            })
             .setBoxCollider({
-                size: new Size(100, 100),
-            })
-            .build();
-        const kinematic = new Kinematic(obj);
-
-
-
-
-        obj = new GameObject(new Vector3(800, 600, 3), "Static", "Static")
-            .setSprite({
-                position: new Vector3(800, 600),
-                size: new Size(100, 100),
-                fill: {
-                    color: "blue"
-                }
-            })
-            .setRigidBody({
-                bodyType: BodyType.static
-            })
-            .setBoxCollider({
-                size: new Size(100, 100),
-            })
-            .build();
-        const static_ = new Static(obj);
-
-
-
-
-        obj = new GameObject(new Vector3(0, engine.graphics.height - 40, 4))
-            .setSprite({
-                position: new Vector3(0, engine.graphics.height - 40),
-                size: new Size(engine.graphics.width, 40),
-                fill: {
-                    color: "green"
-                }
-            })
-            .setBoxCollider({
-                size: new Size(engine.graphics.width, 40)
+                size: new Size(engine.graphics.width, 190)
             })
             .build();
         const ground = new Behaviour(obj);
 
         this.addGameObject(camera);
         this.addGameObject(background);
+        this.addGameObject(background2);
+        this.addGameObject(background3);
         this.addGameObject(dynamic);
-        this.addGameObject(kinematic);
-        this.addGameObject(static_);
+        // this.addGameObject(kinematic);
+        // this.addGameObject(static_);
         this.addGameObject(ground);
         return this;
     }

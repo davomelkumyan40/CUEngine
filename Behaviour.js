@@ -1,5 +1,6 @@
 import BoxCollider from "./Components/BoxCollider.js";
 import CuEntity from "./Components/CuEntity.js";
+import RigidBody from "./Components/RigidBody.js";
 import { engine } from "./Engine.js";
 import Guid from "./Primitives/Guid.js";
 
@@ -9,6 +10,7 @@ export default class Behaviour extends CuEntity {
         this.gameObject = gameObject;
         this.guid = Guid.create();
         this.b = this.getComponent(BoxCollider); // 
+        this.r = this.getComponent(RigidBody); // 
     }
 
     update() {

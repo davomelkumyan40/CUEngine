@@ -2,6 +2,7 @@ import { engine } from '../Engine.js';
 import BodyType from '../Primitives/BodyType.js';
 import ForceMode from '../Primitives/ForceMode.js';
 import Time from '../Primitives/Time.js';
+import Vector3 from '../Primitives/Vector3.js';
 
 export default class RigidBody {
     #g = 9.807;
@@ -10,18 +11,22 @@ export default class RigidBody {
     #pixelMultiplyer = 10;
     #horTime = new Time();
     #position = undefined;
+    #forceFactor = 0.5;
 
-    constructor({ velocity, position, bodyType }) {
+    constructor({ velocity, position, bodyType, mass }) {
         this.#position = position;
         this.velocity = velocity;
         this.time = new Time();
         this.freeFalling = true;
-        //new
-        //this.mass = mass;
-        this.rotation;
+        this.mass = 2; // KG
+        this.rotation = new Vector3(0, 0, 0);
         this.freezeRotation = true;
         this.gravityScale = 1;
         this.bodyType = bodyType;
+    }
+
+    get force() {
+        return this.mass / this.#forceFactor;
     }
 
 
@@ -30,6 +35,7 @@ export default class RigidBody {
     }
 
     set gravity(value) {
+        this.freeFalling = Boolean(value);
         this.#g = value;
     }
 
@@ -69,7 +75,6 @@ export default class RigidBody {
 
     calculateHorizontalForce() {
         if (this.bodyType !== BodyType.dynamic) return;
-        console.log(this.velocity.x);
         this.velocity.x = (this.velocity.x + (this.velocity.x > 0 ? -1 * this.gravity : this.gravity) * this.#horTime.deltaTime); // V = V0 - G * T
         if (Math.floor(this.velocity.x) === 0) {
             this.velocity.x = 0;
@@ -91,34 +96,42 @@ export default class RigidBody {
 
         //calculating collision
         if (boxCollider && this.bodyType !== BodyType.static) {
-            this.#position = boxCollider.transform.position; // TODO
+            this.#position = boxCollider.transform.position;
             const collidables = engine.gameObjects.filter(o => o.boxCollider && o.boxCollider !== boxCollider);
             for (let i = 0; i < collidables.length; i++) {
                 const obj = collidables[i];
                 if (boxCollider.rightCollision(obj.boxCollider)) {
                     if (this.velocity.x > 0) {
                         this.velocity.x = 0;
+                        if (this.bodyType === BodyType.dynamic && obj.rigidBody.bodyType === BodyType.dynamic)
+                            obj.rigidBody.velocity.x = this.force;
                         boxCollider.transform.position.x = obj.boxCollider.bounds.min.x - boxCollider.size.width - boxCollider.offset.x;
                     }
                     this.#isHorizontalForced = false;
                 }
-                if (boxCollider.leftCollision(obj.boxCollider)) {
+                else if (boxCollider.leftCollision(obj.boxCollider)) {
                     if (this.velocity.x < 0) {
                         this.velocity.x = 0;
-                        boxCollider.transform.position.x = obj.boxCollider.bounds.min.x + obj.boxCollider.size.width - boxCollider.offset.x;
+                        if (this.bodyType === BodyType.dynamic && obj.rigidBody.bodyType === BodyType.dynamic)
+                            obj.rigidBody.velocity.x = this.force * -1;
+                        boxCollider.transform.position.x = obj.boxCollider.bounds.max.x - boxCollider.offset.x;
                     }
                     this.#isHorizontalForced = false;
                 }
-                if (boxCollider.topCollision(obj.boxCollider, this.velocity.y)) {
+                else if (boxCollider.topCollision(obj.boxCollider, this.velocity.y)) {
                     if (this.velocity.y < 0) {
                         this.velocity.y = 0;
-                        boxCollider.transform.position.y = obj.boxCollider.bounds.min.y + obj.boxCollider.size.height - boxCollider.offset.y;
+                        if (this.bodyType === BodyType.dynamic && obj.rigidBody.bodyType === BodyType.dynamic)
+                            obj.rigidBody.velocity.y = this.force * -1;
+                        boxCollider.transform.position.y = obj.boxCollider.bounds.max.y - boxCollider.offset.y;
                     }
                     this.#isVerticalForced = false;
                 }
-                if (boxCollider.bottomCollision(obj.boxCollider, this.velocity.y)) {
+                else if (boxCollider.bottomCollision(obj.boxCollider, this.velocity.y)) {
                     if (this.velocity.y > 0) {
                         this.velocity.y = 0;
+                        if (this.bodyType === BodyType.dynamic && obj.rigidBody.bodyType === BodyType.dynamic)
+                            obj.rigidBody.velocity.y = this.force;
                         boxCollider.transform.position.y = obj.boxCollider.bounds.min.y - boxCollider.size.height - boxCollider.offset.y;
                     }
                     this.freeFalling = false;
@@ -130,6 +143,7 @@ export default class RigidBody {
                 }
                 this.#horTime.reset();
             }
+
         }
         this.#position.y += this.velocity.y;
         this.#position.x += this.velocity.x;
