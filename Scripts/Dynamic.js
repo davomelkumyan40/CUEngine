@@ -1,8 +1,7 @@
 import Behaviour from '../Behaviour.js';
-import BoxCollider from '../Components/BoxCollider.js';
 import RigidBody from '../Components/RigidBody.js';
 import { Input, Keys } from '../Input.js';
-import ImpulsMode from '../Primitives/ForceMode.js';
+import ForceMode from '../Primitives/ForceMode.js';
 import Vector3 from '../Primitives/Vector3.js';
 
 
@@ -24,7 +23,7 @@ export class Dynamic extends Behaviour {
         //let vax = Input.getAxis("Vertical");
         this.rBody.velocity.x = hax.mult(this.speed).x;
         if (Input.getKeyDown(Keys.space)) {
-            this.rBody.addForce(new Vector3(0, 2), ImpulsMode.impuls);
+            this.rBody.addForce(new Vector3(-5, 0), ForceMode.impuls);
         }
     }
 }

@@ -2,7 +2,6 @@ import { engine } from '../Engine.js';
 import BodyType from '../Primitives/BodyType.js';
 import ForceMode from '../Primitives/ForceMode.js';
 import Time from '../Primitives/Time.js';
-import Vector3 from '../Primitives/Vector3.js';
 
 export default class RigidBody {
     #g = 9.807;
@@ -70,6 +69,7 @@ export default class RigidBody {
 
     calculateHorizontalForce() {
         if (this.bodyType !== BodyType.dynamic) return;
+        console.log(this.velocity.x);
         this.velocity.x = (this.velocity.x + (this.velocity.x > 0 ? -1 * this.gravity : this.gravity) * this.#horTime.deltaTime); // V = V0 - G * T
         if (Math.floor(this.velocity.x) === 0) {
             this.velocity.x = 0;
@@ -90,45 +90,46 @@ export default class RigidBody {
         }
 
         //calculating collision
-        if (!boxCollider || this.bodyType === BodyType.static) return;
-        this.#position = boxCollider.transform.position; // TODO
-        const collidables = engine.gameObjects.filter(o => o.boxCollider && o.boxCollider !== boxCollider);
-        for (let i = 0; i < collidables.length; i++) {
-            const obj = collidables[i];
-            if (boxCollider.rightCollision(obj.boxCollider)) {
-                if (this.velocity.x > 0) {
-                    this.velocity.x = 0;
-                    boxCollider.transform.position.x = obj.boxCollider.bounds.min.x - boxCollider.size.width - boxCollider.offset.x;
+        if (boxCollider && this.bodyType !== BodyType.static) {
+            this.#position = boxCollider.transform.position; // TODO
+            const collidables = engine.gameObjects.filter(o => o.boxCollider && o.boxCollider !== boxCollider);
+            for (let i = 0; i < collidables.length; i++) {
+                const obj = collidables[i];
+                if (boxCollider.rightCollision(obj.boxCollider)) {
+                    if (this.velocity.x > 0) {
+                        this.velocity.x = 0;
+                        boxCollider.transform.position.x = obj.boxCollider.bounds.min.x - boxCollider.size.width - boxCollider.offset.x;
+                    }
+                    this.#isHorizontalForced = false;
                 }
-                this.#isHorizontalForced = false;
+                if (boxCollider.leftCollision(obj.boxCollider)) {
+                    if (this.velocity.x < 0) {
+                        this.velocity.x = 0;
+                        boxCollider.transform.position.x = obj.boxCollider.bounds.min.x + obj.boxCollider.size.width - boxCollider.offset.x;
+                    }
+                    this.#isHorizontalForced = false;
+                }
+                if (boxCollider.topCollision(obj.boxCollider, this.velocity.y)) {
+                    if (this.velocity.y < 0) {
+                        this.velocity.y = 0;
+                        boxCollider.transform.position.y = obj.boxCollider.bounds.min.y + obj.boxCollider.size.height - boxCollider.offset.y;
+                    }
+                    this.#isVerticalForced = false;
+                }
+                if (boxCollider.bottomCollision(obj.boxCollider, this.velocity.y)) {
+                    if (this.velocity.y > 0) {
+                        this.velocity.y = 0;
+                        boxCollider.transform.position.y = obj.boxCollider.bounds.min.y - boxCollider.size.height - boxCollider.offset.y;
+                    }
+                    this.freeFalling = false;
+                } else {
+                    if (!this.freeFalling && !this.#isVerticalForced) {
+                        this.time.reset();
+                        this.freeFalling = true;
+                    }
+                }
+                this.#horTime.reset();
             }
-            if (boxCollider.leftCollision(obj.boxCollider)) {
-                if (this.velocity.x < 0) {
-                    this.velocity.x = 0;
-                    boxCollider.transform.position.x = obj.boxCollider.bounds.min.x + obj.boxCollider.size.width - boxCollider.offset.x;
-                }
-                this.#isHorizontalForced = false;
-            }
-            if (boxCollider.topCollision(obj.boxCollider, this.velocity.y)) {
-                if (this.velocity.y < 0) {
-                    this.velocity.y = 0;
-                    boxCollider.transform.position.y = obj.boxCollider.bounds.min.y + obj.boxCollider.size.height - boxCollider.offset.y;
-                }
-                this.#isVerticalForced = false;
-            }
-            if (boxCollider.bottomCollision(obj.boxCollider, this.velocity.y)) {
-                if (this.velocity.y > 0) {
-                    this.velocity.y = 0;
-                    boxCollider.transform.position.y = obj.boxCollider.bounds.min.y - boxCollider.size.height - boxCollider.offset.y;
-                }
-                this.freeFalling = false;
-            } else {
-                if (!this.freeFalling && !this.#isVerticalForced) {
-                    this.time.reset();
-                    this.freeFalling = true;
-                }
-            }
-            this.#horTime.reset();
         }
         this.#position.y += this.velocity.y;
         this.#position.x += this.velocity.x;
