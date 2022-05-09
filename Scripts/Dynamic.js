@@ -23,6 +23,10 @@ export class Dynamic extends Behaviour {
         super.fixedUpdate();
         let hax = Input.getAxis("Horizontal");
         let vax = Input.getAxis("Vertical");
+        if (hax.equals(Vector3.left))
+            this.sprite.flipX = false;
+        else if (hax.equals(Vector3.right))
+            this.sprite.flipX = true;
         this.rBody.velocity.x = hax.mult(this.speed).x;
         //this.rBody.velocity.y = vax.mult(this.speed).y;
         if (Input.getKeyDown(Keys.space)) {

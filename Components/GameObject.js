@@ -20,19 +20,18 @@ export default class GameObject extends CuEntity {
         engine.gameObjects.push(this);
     }
 
-    setSprite({ position, size, fill, offset, cutOffset, cutSize }) {
+    addSprite({ position, size, fill, flipX, flipY }) {
         this.sprite = new Sprite({
             position: position,
             size: size,
             fill: fill,
-            offset: offset,
-            cutOffset,
-            cutSize
+            flipX: flipX,
+            flipY: flipY,
         });
         return this;
     }
 
-    setRigidBody({ velocity, bodyType }) {
+    addRigidBody({ velocity, bodyType }) {
         this.rigidBody = new RigidBody({
             velocity: velocity ?? new Vector3(0, 0, 0),
             position: this.transform.position,
@@ -41,7 +40,7 @@ export default class GameObject extends CuEntity {
         return this;
     }
 
-    setBoxCollider({ offset, size, isTrigger = false }) {
+    addBoxCollider({ offset, size, isTrigger = false }) {
         this.boxCollider = new BoxCollider({
             offset: offset ?? new Vector3(0, 0, 0),
             size: size,
@@ -53,11 +52,11 @@ export default class GameObject extends CuEntity {
         return this;
     }
 
-    setCircleCollider() {
+    addCircleCollider() {
         return this;
     }
 
-    setAnimator() {
+    addAnimator() {
         return this;
     }
 
@@ -65,7 +64,7 @@ export default class GameObject extends CuEntity {
 
     build() {
         if (!this.rigidBody && this.boxCollider)
-            this.setRigidBody({ bodyType: BodyType.static });
+            this.addRigidBody({ bodyType: BodyType.static });
         if (this.boxCollider)
             this.boxCollider.attachedRigidBody = this.rigidBody;
         this.spriteRenderer = new SpriteRenderer(this.sprite);

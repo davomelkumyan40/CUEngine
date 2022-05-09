@@ -24,7 +24,7 @@ export default class Designer {
 
     InitializeDesigner() {
         let obj = new GameObject(new Vector3(0, 0, 0))
-            .setSprite({
+            .addSprite({
                 position: new Vector3(0, 0),
                 size: new Size(engine.graphics.width, engine.graphics.height),
                 fill: {
@@ -35,10 +35,9 @@ export default class Designer {
         const camera = new Camera(obj);
 
         obj = new GameObject(new Vector3(0, 0, 1))
-            .setSprite({
+            .addSprite({
                 position: new Vector3(0, 0),
                 size: new Size(engine.graphics.width, engine.graphics.height),
-                offset: new Vector3(engine.graphics.width, engine.graphics.height),
                 fill: {
                     color: "black",
                     src: "./Assets/background.png"
@@ -47,11 +46,9 @@ export default class Designer {
         const background = new Canvas(obj);
 
         obj = new GameObject(new Vector3(0, 0, 1))
-            .setSprite({
+            .addSprite({
                 position: new Vector3(0, 400),
-                size: new Size(engine.graphics.width / 4 - 100, engine.graphics.width),
-                offset: new Vector3(0, 0),
-                cutSize: new Vector3(120, 500),
+                size: new Size(400, 500),
                 fill: {
                     color: "black",
                     src: "./Assets/shop.png"
@@ -61,11 +58,9 @@ export default class Designer {
 
 
         obj = new GameObject(new Vector3(0, 0, 1))
-            .setSprite({
-                position: new Vector3(1430, 400),
-                size: new Size(engine.graphics.width / 4 - 100, engine.graphics.width),
-                offset: new Vector3(0, 0),
-                cutSize: new Vector3(120, 500),
+            .addSprite({
+                position: new Vector3(1150, 400),
+                size: new Size(400, 500),
                 fill: {
                     color: "black",
                     src: "./Assets/shop.png"
@@ -75,22 +70,21 @@ export default class Designer {
 
 
         obj = new GameObject(new Vector3(300, 600, 2), "Hero", "Hero")
-            .setSprite({
+            .addSprite({
                 position: new Vector3(300, 600),
-                size: new Size(engine.graphics.width / 2 - 100, engine.graphics.height - 240),
-                offset: new Vector3(90, 80),
-                cutSize: new Vector3(190, 200),
+                size: new Size(75, 190),
                 fill: {
-                    src: "/Assets/hero/idle.png",
-                    color: "red"
-                }
+                    src: "/Assets/hero/Idle.png",
+                },
+                flipX: false,
+                flipY: false
             })
-            .setRigidBody({
+            .addRigidBody({
                 bodyType: BodyType.dynamic
             })
-            .setBoxCollider({
+            .addBoxCollider({
                 offset: new Vector3(0, 0),
-                size: new Size(75, 200)
+                size: new Size(75, 190)
             })
             .build();
         const dynamic = new Dynamic(obj);
@@ -136,14 +130,14 @@ export default class Designer {
 
 
         obj = new GameObject(new Vector3(0, engine.graphics.height - 170, 4))
-            .setSprite({
+            .addSprite({
                 position: new Vector3(0, engine.graphics.height - 170),
                 size: new Size(engine.graphics.width, 170),
                 fill: {
                     color: ""
                 }
             })
-            .setBoxCollider({
+            .addBoxCollider({
                 size: new Size(engine.graphics.width, 190)
             })
             .build();

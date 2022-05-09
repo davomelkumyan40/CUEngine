@@ -26,8 +26,12 @@ export default class Transform extends CuEntity {
 
     //TODO finish binding
     bind(sprite) {
-        sprite.position.x = this.position.x;
-        sprite.position.y = this.position.y;
+        if (sprite.flipX)
+            sprite.position.x = this.position.x * -1;
+        else sprite.position.x = this.position.x;
+        if (sprite.flipY)
+            sprite.position.y = this.position.y * -1;
+        else sprite.position.y = this.position.y;
     }
 
     translate(vector3) {
